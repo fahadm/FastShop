@@ -1,0 +1,54 @@
+﻿@{
+    
+    
+    if (IsPost)
+    {
+        
+        Response.Write(Request["name"] + Request["password"]);
+        if (WebSecurity.Login(Request["name"], Request["password"]) )
+        {
+            if (WebSecurity.IsAuthenticated ) 
+            {
+                Response.Write("Authenticated");
+            }
+        // Server.TransferRequest(@"~\")   ;
+        }
+        else
+        {
+            <text> <div class="row-fluid"> Invalid Username or password</div></text>
+        }
+    }
+    
+}
+
+
+<div class="row-fluid">
+    <div class="span8 " style="float: right">
+
+
+        <form method="post" action="~/Login">
+            <table>
+
+
+                <tr>
+                    <td><b>Login</b> </td>
+                    <td>@Html.TextBox("name") </td>
+                </tr>
+
+                <tr>
+                    <td><b>Password</b> </td>
+                    <td>@Html.Password("password") </td>
+                </tr>
+                <tr>
+            </table>
+
+            <div class="span2">
+            <button type="submit" class="btn btn-info"><i class="icon-white icon-plus"></i>Login</button>
+                </div>
+            <div class="span2">
+            <button type="reset" class="btn btn-info"><i class="icon-white icon-plus"></i>Reset</button></div>
+
+        </form>
+        
+    </div>
+</div>

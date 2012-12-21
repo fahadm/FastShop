@@ -1,0 +1,100 @@
+
+@{
+
+    Layout = "Shared/Layout.cshtml";
+
+    var db = Database.Open("Shopping");
+    var query = "select * from Products";
+    var res = db.Query(query);
+    
+    
+    
+
+       
+}
+
+
+
+<div class="row-fluid">
+    <div class="tabbable tabs-left">
+        <ul class="nav nav-tabs">
+
+            
+            <li><a href="~\Category">Catergories</a></li>
+            <li><a href="#1" data-toggle="tab">Motors</a></li>
+            <li><a href="#2" data-toggle="tab">Fashion</a></li>
+            <li><a href="#3" data-toggle="tab">Electronics</a></li>
+            <li><a href="#4" data-toggle="tab">Collectibles & Art</a></li>
+            <li><a href="#5" data-toggle="tab">Home ,outdoor & decor</a></li>
+            <li><a href="#6" data-toggle="tab">Sporting Goods</a></li>
+            <li><a href="#7" data-toggle="tab">Toys & Hobbies</a></li>
+            <li><a href="#8" data-toggle="tab">Jewelary & Watches</a></li>
+            <li><a href="#9" data-toggle="tab">Health & beauty </a></li>
+            <li><a href="#10" data-toggle="tab">Deals & Gifts</a></li>
+
+        </ul>
+        <div class="tab-content floatShadow well">
+            <div class="tab-pane active" id="home">
+                <p>Welcome to this site, This site is pretty awesome. This is the main page of awesomeness</p>
+            </div>
+            <div class="tab-pane " id="1">
+
+                
+                    
+                        
+                        
+                        
+
+                    
+                
+
+                
+
+
+                
+            </div>
+            <div class="tab-pane" id="2">
+                <p>Howdy, I'm in Section B.</p>
+            </div>
+            <div class="tab-pane" id="3">
+                <p>And this is Section C.</p>
+            </div>
+            <div class="tab-pane" id="4">
+                <p>And this is Section C.</p>
+            </div>
+            <div class="tab-pane" id="5">
+                <p>And this is Section C.</p>
+            </div>
+            <div class="tab-pane" id="6">
+                <p>And this is Section C.</p>
+            </div>
+            <div class="tab-pane" id="7">
+                <p>And this is Section C.</p>
+            </div>
+            <div class="tab-pane" id="8">
+                <p>And this is Section C.</p>
+            </div>
+            <div class="tab-pane" id="9">
+                <p>And this is Section C.</p>
+            </div>
+            <div class="tab-pane" id="10">
+                <p>And this is Section C.</p>
+            </div>
+        </div>
+    </div>
+</div>
+    @foreach (var item in res)
+                        {
+                            <text>
+                             <script>
+                                 var str ="@WriteHelpers.WriteProduct(@"/Images/small/" + item.Image, item.Name, Convert.ToString(item.Id))" ;
+
+                                 $(str).appendTo('#@item.Category');
+                                 
+
+                             </script>
+                    </text>
+                            Response.Write("Product Written");
+                            
+
+                        }

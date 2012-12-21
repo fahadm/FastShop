@@ -1,0 +1,5 @@
+﻿@{
+    var db= Database.Open("Shopping");
+    var rows = db.Query("Select * from Products where Category=@0",Convert.ToInt32(UrlData[0]) );
+
+    }
