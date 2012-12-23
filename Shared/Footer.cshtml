@@ -1,4 +1,5 @@
-﻿ <div class='navbar'>
+﻿@using Microsoft.Web.Helpers; 
+<div class='navbar' id="BottomNavBar">
       <div class='navbar-inner'>
         <div class='container'>
            <ul class='nav'>
@@ -8,6 +9,7 @@
             <li>
               <a href='/'>Contact</a>
             </li>
+               
           </ul>
           
         </div>
@@ -23,14 +25,29 @@
         var navHomeY = nav.offset().top;
         var isFixed = false;
         var $w = $(window);
+        $.ready()
+        {
+            $('#TopNavigationBar').offset({ left: 0,right:$w.width() });
+            $('#BottomNavBar').offset({ left: 0, right: $w.width() });
+
+
+        }
+        $w.resize(function () {
+            $('#TopNavigationBar').width($w.width());
+            $('#TopNavigationBar').offset({ left: 0 });
+            $('#BottomNavBar').offset({ left: 0 });
+//            alert($w.width());
+
+        });
         $w.scroll(function () {
+            
             var scrollTop = $w.scrollTop();
-            var shouldBeFixed = scrollTop > navHomeY;
+            var shouldBeFixed = scrollTop+20 > navHomeY;
             if (shouldBeFixed && !isFixed) {
                 nav.css({
                     position: 'fixed',
                     top: 0,
-                    left: nav.offset().left,
+                    left: 0,
                     width: nav.width()
                 });
                 isFixed = true;

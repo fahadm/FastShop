@@ -1,8 +1,10 @@
-﻿<div class='navbar' id="TopNavigationBar" style="width: inherit">
+﻿@using System.Web.Mvc;
+<div class='navbar' id="TopNavigationBar" style="width: inherit">
     <div class='navbar-inner '>
         <div class='container'>
             <a class='brand' href='/'>Main</a>
             <ul class='nav'>
+            
                 <li>
                     <a class='active' href='/'>About</a>
                 </li>
@@ -12,12 +14,23 @@
             </ul>
 
             <ul class='nav' style="float: right">
+                 
+
                 @if (WebSecurity.IsAuthenticated)
                 {
+                    if (Roles.IsUserInRole("Admin"))
+                    {
+                        <li>
+                        <a class='active' href='~/Admin'>Admin Panel</a>
+                    </li>
+                    
+                    
+                    }
+                    
                     <text>
                     <li>
 
-                        <a href='~/'>Welcome @WebSecurity.CurrentUserName</a>
+                        <a href='~/Admin'>Welcome @WebSecurity.CurrentUserName</a>
                     </li>
                     <li>
                         <a href='~/logout'>Logout</a>
@@ -35,9 +48,11 @@
                     <li>
                         <a href='~/Register'>Register</a>
                     </li>
-                </text>
+                    </text>
                     
                 }
+
+
             </ul>
 
 

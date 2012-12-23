@@ -7,10 +7,10 @@
         Response.Write(Request["name"] + Request["password"]);
         if (WebSecurity.Login(Request["name"], Request["password"]) )
         {
-            if (WebSecurity.IsAuthenticated ) 
-            {
+   
                 Response.Write("Authenticated");
-            }
+                Response.Redirect("~/Admin/index.cshtml");
+            
         // Server.TransferRequest(@"~\")   ;
         }
         else
