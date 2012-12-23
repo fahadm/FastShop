@@ -1,0 +1,33 @@
+﻿@{
+    if (WebSecurity.IsAuthenticated)
+    {
+        if (!Roles.IsUserInRole("Admin"))
+        {
+            Response.Redirect("~/index.cshtml");
+            return;
+        }
+
+        //<a href="~/index.cshtml">~/index.cshtml</a>
+
+    }
+    else
+    {
+
+        Response.Redirect("~/login");
+    }
+}
+
+
+<div class='span8 offset2 floatShadow well bgwhite' id="srchFrm" style="text-align:center">
+    <div>
+        <a>Item Management</a>
+        </div>
+    <div>
+        <a>Category Management</a>
+    </div>
+    <div>
+        <a>Reports Management</a>
+    </div>
+
+
+</div>
