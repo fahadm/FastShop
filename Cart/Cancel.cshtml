@@ -1,0 +1,14 @@
+﻿@{
+    if (UrlData[0] != null)
+    {
+        var db2 = Database.Open("shopping");
+
+        db2.Execute("update SALE set Status='InProcess' where SALEID=@0 ", UrlData[0]);
+        Session["CurrentSale"] = UrlData[0];
+    }
+    else
+    {
+        Response.Redirect(@"~\");
+    }
+    
+}

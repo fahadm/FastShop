@@ -36,6 +36,29 @@
         Roles.AddUserToRole("Administrator", "Admin");
     }
 
+    
+    PayPal.Profile.Initialize(
+            "protom_1356535112_biz_api1.gmail.com",
+            "1356535133",
+            "An5ns1Kso7MWUdW4ErQKJJJ4qi4-AY3hjsyrb.HUImrIWKYdCA1.pLF7",
+            "sandbox");
+
+    // General Adaptive Payments’ properties
+    PayPal.Profile.Language = "en_US";
+    PayPal.Profile.ReturnUrl="http://localhost:21503/cart/Checkout.cshtml";
+    
+    PayPal.Profile.CurrencyCode = "USD";
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     // To let users of this site log in using their accounts from other sites such as Microsoft, Facebook, Twitter,
     // you must update this site. For more information visit http://go.microsoft.com/fwlink/?LinkID=226949
 

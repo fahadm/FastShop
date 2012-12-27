@@ -30,7 +30,12 @@
                     <text>
                     <li>
 
-                        <a href='~/Admin'>Welcome @WebSecurity.CurrentUserName</a>
+                        <a href='~/Cart/View'>View Cart</a>
+                    </li>
+
+                    <li>
+
+                        <a href='~/Account/Profile'>Welcome @WebSecurity.CurrentUserName</a>
                     </li>
                     <li>
                         <a href='~/logout'>Logout</a>
@@ -40,7 +45,7 @@
                 }
                 else
                 {
-                    Response.Write("Not authenticated");
+                 //   Response.Write("Not authenticated");
                     <text>
                     <li>
                         <a href='~/Login'>Sign In</a>

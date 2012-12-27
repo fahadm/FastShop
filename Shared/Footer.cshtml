@@ -9,7 +9,9 @@
             <li>
               <a href='/'>Contact</a>
             </li>
-               
+           <li style="text-align:right">
+                   @Facebook.LikeButton(Request.Url.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped) + Request.ApplicationPath);
+               </li>    
           </ul>
           
         </div>

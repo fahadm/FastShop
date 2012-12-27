@@ -1,7 +1,10 @@
 ﻿@{
-    Response.Write(Session["CurrentSale"]);
     
+    //Response.Write(Session["CurrentSale"]);
+    Validation.Add("Qty",new[]{ Validator.Required(" This validator is required"),Validator.Integer("Only Integer Values Allows"),Validator.Range(0,100,"Decimal out of range")});
     
+        
+
     if (UrlData.Count == 0)
     {
         Response.Redirect(@"~\");
@@ -15,7 +18,7 @@
     }
     bool Authorised = WebSecurity.IsAuthenticated && Roles.IsUserInRole("Admin");
     var db = Database.Open("shopping");
-
+    int Quantity = Convert.ToInt32(db.QueryValue("select  Quantity from Products where Id=@0", UrlData[0]));
     if (IsPost)
     {
 
@@ -33,44 +36,64 @@
 
             //WriteHelpers.UpdateRowProduct(UrlData[0], Request.Form["name"], Request.Form["desc"], Request.Form["price"]);
         }
-        
-            if (WebSecurity.IsAuthenticated)
+
+        if (WebSecurity.IsAuthenticated )
+        {
+            
+            if (Request.Form["Type"] == "AddToCart" && Validation.IsValid())
             {
-                if (Request.Form["Type"] == "AddToCart")
+                int CurrentSaleId = -1;
+                if (Session["CurrentSale"] == null || Convert.ToString(Session["CurrentSale"]) == "" || Convert.ToInt32(Session["CurrentSale"]) == -1)
                 {
-                    int CurrentSaleId = -1; ;
-                    if (Session["CurrentSale"] == null)
+
+                    var SidRes = db.Query("select SaleID from Sale where Status = @0 and UserID=@1 ", "InProcess", WebSecurity.CurrentUserId);
+
+                    if (SidRes.Count() > 0)
                     {
-                        DateTime dt = DateTime.Now;
-                        
-                            
-                        db.Execute("insert into Sale(UserId,Status,Date) values(@0,@1,@2)", WebSecurity.CurrentUserId, "InProcess", dt);
-                        CurrentSaleId = Convert.ToInt32(db.QueryValue ("select SaleId from Sale where Date=@0 and UserId=@1", dt, WebSecurity.CurrentUserId));
-                        Session["CurrentSale"] = CurrentSaleId;
+                        Session["CurrentSale"] = SidRes.ElementAt(0).SaleID;
                     }
                     else
                     {
-                        CurrentSaleId = (int)Session["CurrentSale"];
+
+                        DateTime dt = DateTime.Now;
+
+
+                        db.Execute("insert into Sale(UserId,Status,Date) values(@0,@1,@2)", WebSecurity.CurrentUserId, "InProcess", dt);
+                        CurrentSaleId = Convert.ToInt32(db.QueryValue("select SaleId from Sale where Date=@0 and UserId=@1", dt, WebSecurity.CurrentUserId));
+                        Session["CurrentSale"] = CurrentSaleId;
                     }
-
-                    int NextLineNo = db.QueryValue("select  Count(*) from SaleLineItems where SaleId=@0", CurrentSaleId) + 1;
-
-                    db.Execute("insert into SaleLineItems(SaleID,ProductID,Quantity,LineID) values(@0,@1,@2,@3)", CurrentSaleId, UrlData[0], Request["Qty"],NextLineNo);
                 }
-            }
-            else
-            {
-                <text>You need to sign in.Click the Top right button to sign in. or Register.</text>
-    
+                else
+                {
+                    CurrentSaleId = Convert.ToInt32(Session["CurrentSale"]);
+                }
+
+                int NextLineNo = db.QueryValue("select  Count(*) from SaleLineItems where SaleId=@0", CurrentSaleId) + 1;
+                
+                if (Quantity - Request["Qty"].AsInt()  >0)
+                {
+                    db.Execute("Update Products set Quantity= @0 where Id = @1", Quantity - Request["Qty"].AsInt(), UrlData[0]);
+                    db.Execute("insert into SaleLineItems(SaleID,ProductID,Quantity,LineID) values(@0,@1,@2,@3)", CurrentSaleId, UrlData[0], Request["Qty"], NextLineNo);
+                }
+                
+                    
                 
             }
-        
+        }
+        else
+        {
+    <text>You need to sign in.Click the Top right button to sign in. or Register.</text>
+    
+                
+        }
+
 
     }
 
 
 
     var row = db.Query("select * from Products where Id = @0", UrlData[0]);
+
     db.Close();
     dynamic elem = row.ElementAt(0);
     
@@ -110,7 +133,9 @@
                 <input type="text"name="price" id="price" value="@elem.Price" />
             </p>
             Quantity:
-            <input type="text" name="Qty" class="span1" style="margin-left: 10px" /><br />
+            <input type="text" name="Qty" value="1" class="span1" style="margin-left: 10px" @Validation.For("Qty") /> @Html.ValidationMessage("Qty")<br />
+            <br />
+            <p> Quantity Available @Quantity</p>
             <button class="btn btn-info" type="submit" id="Atc"><i class="icon-white icon-plus"></i>Add To Cart </button>
 
 
@@ -188,11 +213,11 @@
         );
 
     $('#Atc').click(function () {
-        
+
         var v = $("#Frm");
         $("<input>", { type: "hidden", name: "Type" }).appendTo($(v)).val("AddToCart");
 
         $('#Frm').submit();
-        
+
     });
 </script>

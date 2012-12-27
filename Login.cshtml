@@ -1,14 +1,16 @@
 ﻿@{
     
+    Validation.RequireField("name", "Name is Required");
+    Validation.RequireField("password", "password is Required");
     
-    if (IsPost)
+    if (IsPost && Validation.IsValid())
     {
         
-        Response.Write(Request["name"] + Request["password"]);
+        //Response.Write(Request["name"] + Request["password"]);
         if (WebSecurity.Login(Request["name"], Request["password"]) )
         {
    
-                Response.Write("Authenticated");
+         //       Response.Write("Authenticated");
                 Response.Redirect("~/Admin/index.cshtml");
             
         // Server.TransferRequest(@"~\")   ;
@@ -18,6 +20,7 @@
             <text> <div class="row-fluid"> Invalid Username or password</div></text>
         }
     }
+    
     
 }
 
@@ -32,12 +35,17 @@
 
                 <tr>
                     <td><b>Login</b> </td>
-                    <td>@Html.TextBox("name") </td>
+                    <td><input type="text" name="name" @Validation.For("name") />@Html.ValidationMessage("name")
+                        </td>
                 </tr>
 
                 <tr>
                     <td><b>Password</b> </td>
-                    <td>@Html.Password("password") </td>
+                    <td>
+                        
+                        <input type="password" name="password" @Validation.For("password") />@Html.ValidationMessage("password")
+
+                    </td>
                 </tr>
                 <tr>
             </table>

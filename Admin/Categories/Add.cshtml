@@ -2,7 +2,7 @@
 
 @{
     
-
+    Validation.Add("name",new []{Validator.Required("Name is required")});
     if (WebSecurity.IsAuthenticated && Roles.IsUserInRole("Admin"))
     {
         //Everything is ok
@@ -18,9 +18,27 @@
 
             wi.Save(@"~\Images\small\" + filename , "png");
             var db = Database.Open("shopping");
+            int id = db.QueryValue("Select count(*) from Category ");
+            
+            db.Execute("insert into Category(Id,Name,Image) values(@0,@1,@2)", id,Request.Form["name"].ToString(), filename + ".png");
 
-            db.Execute("insert into Category(Name,Image) values(@0,@1)", Request.Form["name"].ToString(), filename + ".png");
+            
+            var rows = db.Query("select * from Category order by Id ");
 
+            List<SelectListItem> Lsi = new List<SelectListItem>();
+            foreach (var item in rows)
+            {
+
+
+                SelectListItem SlItems = new SelectListItem();
+                SlItems.Text = item.Name;
+                SlItems.Value = Convert.ToString(item.Id);
+                Lsi.Add(SlItems);
+
+            }
+
+            AppState["List"] = Lsi;
+            
 
         }
 
@@ -37,7 +55,7 @@
 
         <div class="span4 offset2" style="text-align: center">Category Name </div>
         <div class="span4" style="text-align: left">
-            <input type="text" name="name" placeholder="Text input">
+            <input type="text" name="name" placeholder="Text input" @Validation.For("name")>@Html.ValidationMessage("name")
         </div>
     </div>
     
@@ -49,11 +67,12 @@
             </div>
 
         </div>
-        
-</form>
-<div class="row-fluid " style="text-align: center">
+    <div class="row-fluid " style="text-align: center">
     <button type="submit" class="btn btn-info"><i class="icon-white icon-plus"></i>Add </button>
 
 
 </div>
+
+        
+</form>
 

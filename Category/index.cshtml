@@ -3,12 +3,14 @@
     var rows = db.Query("Select * from Category");
     int x = 0;
 }
+<div class="span4 offset4" style="text-align:center"><h3>Categories</h3>
+    </div>
+<div class='span8 offset2 floatShadow well bgwhite' style="text-align:center">
 
-<div class="row-fluid offset4">
 @foreach (var item in rows)
 {
    
-    @WriteHelpers.WriteCategory(item.Image, item.Name, Convert.ToString(item.Id ));
+    @WriteHelpers.WriteCategory(@"/Images/small/"+ item.Image, item.Name, Convert.ToString(item.Id ));
    
     x++;
 }

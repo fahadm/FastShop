@@ -2,78 +2,120 @@
     
     
     Layout = @"~\shared\layout.cshtml";
-    
-    
+    Validation.Add("name", new[] { Validator.Required("This Field is required") });
+    Validation.Add("address", new[] { Validator.Required("This Field is required") });
+
+    Validation.Add("phoneno", new[] { Validator.Required("This Field is required"), Validator.Integer("Phoneno should be numeric ") });
+    Validation.Add("age", new[] { Validator.Required("This Field is required"), Validator.Integer("Phoneno should be numeric ") });
+
+
+    Validation.Add("uname", new[] { Validator.Required("uname is required") });
+    Validation.Add("password", new[] { Validator.Required("password Field is required"), Validator.Range(6, 42, "Password is too short") });
+    Validation.Add("Rpassword", new[] { Validator.Required("This Field is required"), Validator.EqualsTo("password", "passwords donot match") });
+
+    Validation.Add("mcn", new[] { Validator.Required("This Field is required"), Validator.Integer("Master Card no should be numeric") });
+
     if (IsPost)
     {
-        
-        UserDetails ud = new UserDetails(Request["name"] ,Request["address"],Request["phoneno"],Convert.ToInt32( Request["age"]),Request["mcn"]);
-        if (WebSecurity.UserExists(Request["uname"].ToString()) || Request["password"] != Request["Rpassword"])
+        if (!Validation.IsValid())
         {
-            <text> Username already Exists Registeration Unsuccesful </text>
+    <Text>@Html.ValidationSummary()</Text>
+            
         }
         else
         {
 
-        WebSecurity.CreateUserAndAccount(Request["uname"].ToString(), Request["password"].ToString(),ud);
-            <text> Registeration Succesful </text>
-        return;
+            UserDetails ud = new UserDetails(Request["name"], Request["address"], Request["phoneno"], Convert.ToInt32(Request["age"]), Request["mcn"]);
+            if (WebSecurity.UserExists(Request["uname"].ToString()) || Request["password"] != Request["Rpassword"])
+            {
+    <text> Username already Exists Registeration Unsuccesful </text>
+            }
+            else
+            {
+
+                WebSecurity.CreateUserAndAccount(Request["uname"].ToString(), Request["password"].ToString(), ud);
+    <text> Registeration Succesful </text>
+                return;
+            }
         }
     }
 }
 <div class="row-fluid">
-    <div class="span8 " style="float:right">
+    <div class="span8 " style="float: right">
 
-        <form  action="~/Register" method="post">
+        <form action="~/Register" method="post">
             <table>
 
 
                 <tr>
                     <td><b>Name</b> </td>
-                    <td>@Html.TextBox("name") </td>
+                    <td>
+                        <input  name="name" type="text" @Validation.For("name") />
+                        @Html.ValidationMessage("name")
+
+                    </td>
                 </tr>
 
                 <tr>
                     <td><b>Address</b> </td>
-                    <td>@Html.TextBox("Address") </td>
+                    <td>
+                        <input  name="Address" type="text" @Validation.For("Address") />@Html.ValidationMessage("Address")
+
+                    </td>
                 </tr>
                 <tr>
                     <td><b>Phone No</b> </td>
-                    <td>@Html.TextBox("phoneno") </td>
+                    <td>
+                        <input  name="phoneno" type="text" @Validation.For("phoneno") />@Html.ValidationMessage("phoneno")
+
+                    </td>
                 </tr>
                 <tr>
                     <td><b>Age </b></td>
-                    <td>@Html.TextBox("age") </td>
-                </tr>
-                
-                    <tr>
-                        <td><b>Username</b> </td>
-                        <td>@Html.TextBox("uname") </td>
-                    </tr>
+                    <td>
+                        <input  name="age" type="text" @Validation.For("age") />@Html.ValidationMessage("age")
 
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><b>Username</b> </td>
+                    <td>
+                        <input  name="uname" type="text" @Validation.For("uname") />@Html.ValidationMessage("uname")
+
+                    </td>
+                </tr>
+                <tr>
                     <td><b>Password</b> </td>
-                    <td>@Html.Password("password") </td>
+                    <td>
+                        <input  name="password" type="password" @Validation.For("password") />@Html.ValidationMessage("password")
+
+                    </td>
                 </tr>
                 <tr>
                     <td><b>Reenter Password</b> </td>
-                    <td>@Html.Password("Rpassword") </td>
+                    <td>
+                        <input  name="Rpassword" type="password" @Validation.For("Rpassword") />@Html.ValidationMessage("Rpassword")
+
+                    </td>
                 </tr>
                 <tr>
                     <td><b>Master Card No</b> </td>
-                    <td>@Html.TextBox("mcn No") </td>
+                    <td>
+                        <input  name="mcn" type="text" @Validation.For("mcn") />@Html.ValidationMessage("mcn")
+
+                    </td>
                 </tr>
 
 
             </table>
             <button type="submit" class="btn btn-info"><i class="icon-white icon-plus"></i>Register </button>
-        
+
         </form>
-        
-    </div>
-    <div class="row-fluid " style="text-align:center">
-    
 
     </div>
-  
+    <div class="row-fluid " style="text-align: center">
+    </div>
+
 
 </div>
