@@ -10,7 +10,7 @@
 
 
     Validation.Add("uname", new[] { Validator.Required("uname is required") });
-    Validation.Add("password", new[] { Validator.Required("password Field is required"), Validator.Range(6, 42, "Password is too short") });
+	Validation.Add("password", new[] { Validator.Required("password Field is required"), Validator.StringLength(6, 42, "Password is too short") });
     Validation.Add("Rpassword", new[] { Validator.Required("This Field is required"), Validator.EqualsTo("password", "passwords donot match") });
 
     Validation.Add("mcn", new[] { Validator.Required("This Field is required"), Validator.Integer("Master Card no should be numeric") });
