@@ -32,7 +32,7 @@
                 <td>@(item.Description.Substring(0,10) +"..." )</td>
                 <td>@item.Image</td>
                 @(index= Convert.ToInt32(item.Category))
-                <td>@( ((List<SelectListItem>) (AppState["List"]) ) [index-1].Text)</td>
+                <td>@( ((List<SelectListItem>) (AppState["List"]) ) [index].Text)</td>
             </tr>
 
             </text>
