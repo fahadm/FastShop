@@ -1,4 +1,5 @@
 ﻿@{
+    Layout = @"~\shared\layout.cshtml";
     IEnumerable<dynamic> Res = new List<dynamic>();
     if (WebSecurity.IsAuthenticated)
     {
@@ -40,12 +41,13 @@
                 }
             }
          //   Response.Write(Request.Form["DeleteSale"]);
-            if (Request.Form["DeleteSale"] == "DeleteSale")
+           /* if (Request.Form["DeleteSale"] == "DeleteSale")
             {
                 db.Execute("Delete from SaleLineItems where SaleID=@0", Session["CurrentSale"]);
                 db.Execute("Delete from Sale where SaleID=@0", Session["CurrentSale"], Request.Form["Deleted"]);
 
             }
+            * */
 
         }
 
@@ -145,17 +147,17 @@
         </div>
 
         <div class="row-fluid">
-            <div class="span4 offset4">
+            <div class="span4 offset5">
 
                 <button id="checkout1" class="btn btn-info" type="submit" value="CheckOut" name="checkout">Checkout</button>
 
             </div>
             <div class="span4">
-                <form method="post" action="#">
+               @* <form method="post" action="#">
 
                     <button class="btn btn-info" type="submit" value="DeleteSale" name="DeleteSale">Delete </button>
 
-                </form>
+                </form>*@
             </div>
         </div>
         <form id="Fh" method="post" action="CheckOut.cshtml">

@@ -12,7 +12,7 @@
     var hostUrl = Request.Url.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped) + Request.ApplicationPath;
     var cancelUrl = hostUrl + "Cart/Cancel/"+Session["CurrentSale"].ToString() ;
     var IpnUrl = hostUrl + "cart/Notification";
-    var returnUrl = hostUrl + "cart/Checkout";
+    var returnUrl = hostUrl + "cart/Success/" + Session["CurrentSale"].ToString();
     
      //Enter the email of the receiver 
     var receiver = "protom_1356535112_biz@gmail.com"; 

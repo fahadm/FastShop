@@ -18,7 +18,7 @@
     }
     bool Authorised = WebSecurity.IsAuthenticated && Roles.IsUserInRole("Admin");
     var db = Database.Open("shopping");
-    int Quantity = Convert.ToInt32(db.QueryValue("select  Quantity from Products where Id=@0", UrlData[0]));
+    int Quantity = Convert.ToInt32(db.QueryValue("select  Quantity from Products where Id=@0", UrlData[0]));   
     if (IsPost)
     {
 
@@ -43,7 +43,7 @@
             if (Request.Form["Type"] == "AddToCart" && Validation.IsValid())
             {
                 int CurrentSaleId = -1;
-                if (Session["CurrentSale"] == null || Convert.ToString(Session["CurrentSale"]) == "" || Convert.ToInt32(Session["CurrentSale"]) == -1)
+                if (Session["CurrentSale"] == null || Convert.ToString(Session["CurrentSale"]) == "" || Convert.ToInt32(Session["CurrentSale"]) == -1 )
                 {
 
                     var SidRes = db.Query("select SaleID from Sale where Status = @0 and UserID=@1 ", "InProcess", WebSecurity.CurrentUserId);
@@ -68,12 +68,22 @@
                     CurrentSaleId = Convert.ToInt32(Session["CurrentSale"]);
                 }
 
+
                 int NextLineNo = db.QueryValue("select  Count(*) from SaleLineItems where SaleId=@0", CurrentSaleId) + 1;
                 
-                if (Quantity - Request["Qty"].AsInt()  >0)
+                if (Quantity - Request["Qty"].AsInt()  >=0)
                 {
                     db.Execute("Update Products set Quantity= @0 where Id = @1", Quantity - Request["Qty"].AsInt(), UrlData[0]);
+                    dynamic Qres=1;
+                    if ( (Qres=db.QuerySingle("select * from SaleLineItems where SaleID=@0 and ProductID=@1",CurrentSaleId,UrlData[0]) ) != null) {
+                        db.Execute("Update SaleLineItems set Quantity= @0 where ProductId = @1 and SaleID = @2", Qres.Quantity + Request["Qty"].AsInt(), UrlData[0], CurrentSaleId);
+                        
+                    }
+                    else
+                    {
                     db.Execute("insert into SaleLineItems(SaleID,ProductID,Quantity,LineID) values(@0,@1,@2,@3)", CurrentSaleId, UrlData[0], Request["Qty"], NextLineNo);
+                    }
+                    Quantity = Quantity - Request["Qty"].AsInt();
                 }
                 
                     
