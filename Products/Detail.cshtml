@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     
     //Response.Write(Session["CurrentSale"]);
     Validation.Add("Qty",new[]{ Validator.Required(" This validator is required"),Validator.Integer("Only Integer Values Allows"),Validator.Range(0,100,"Decimal out of range")});
